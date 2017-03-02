@@ -91,8 +91,9 @@ or
   {\tt MQ} & i & Mapping quality of the mate/next segment \\
   {\tt NH} & i & Number of reported alignments that contains the query in the current record \\
   {\tt NM} & i & Edit distance to the reference \\
-  {\tt OC} & Z & Original CIGAR \\
-  {\tt OP} & i & Original mapping position \\
+  {\tt OA} & Z & Original Alignment \\
+  {\tt OC} & Z & Original CIGAR (deprecated; use {\tt OA} instead) \\
+  {\tt OP} & i & Original mapping position (deprecated; use {\tt OA} instead) \\
   {\tt OQ} & Z & Original base quality \\
   {\tt OX} & Z & Original unique molecular barcode bases \\
   {\tt PG} & Z & Program \\
@@ -207,11 +208,13 @@ Same encoding as {\sf QUAL}.
 Sequence of the mate/next segment in the template.  See also {\tt Q2}
 for any associated quality values.
 
-\item[SA:Z:\tagregex{{\tt (}\emph{rname}{\tt ,}\emph{pos}{\tt ,}\emph{strand}{\tt ,}\emph{CIGAR}{\tt ,}\emph{mapQ}{\tt ,}\emph{NM}{\tt ;)}+}]
-Other canonical alignments in a chimeric alignment, formatted as a semicolon-delimited list.
-Each element in the list represents a part of the chimeric alignment. Conventionally, at a supplementary line, the first element points to the primary line.
-\emph{Strand} is either `{\tt +}' or `{\tt -}', indicating positive/negative strand, corresponding to FLAG bit 0x10.
-\emph{Pos} is a 1-based coordinate.
+Le\item[SA:Z:\tagregex{{\tt (}\sf{RNAME}{\tt ,}\sf{POS}{\tt ,}\emph{strand}{\tt ,}\sf{CIGAR}{\tt ,}\sf{MAPQ}{\tt ,}\sf{NM}{\tt ;)}+}]
+The tag encodes the values of other canonical alignments in a chimeric alignment, formatted as a semicolon-delimited list. 
+Where \emph{strand} encodes the 0x10 bit of {\sf FLAG}---indicating positive/negative strand--- such that it is '+' if the bit is unset and '--' if the bit is set.
+The other values are taken directly from the canonical read.
+Each element in the list represents a part of the chimeric alignment. 
+Conventionally, when present at a supplementary line, the first element points to the primary line.
+\emph{\sf POS} is a 1-based coordinate.
 
 \item[SM:i:\tagvalue{}]
 Template-independent mapping quality.
@@ -317,11 +320,29 @@ In the case of multiple unique molecular identifiers (e.g., one on each end of t
 \subsection{Original data}
 
 \begin{description}
+\item[OA:Z:\tagregex{{\tt (}\sf{RNAME}{\tt,\,}\sf{POS}{\tt,\,}\emph{strand}{\tt,\,}\sf{CIGAR}{\tt,\,}\sf{MAPQ}{\tt,\,}\sf{NM}{\tt; )}+}]
+The tag encodes the original alignment information of the segment prior to realignment or unalignment by subsequent tool. 
+Here {\sf strand} encodes the 0x10 bit of {\sf FLAG}---{\sf SEQ} being reverse complemented---such that it is `+' if the bit is unset and `-' if the bit is set,
+Resulting string is the result of joining the 6 values with commas `,' (no additional spaces).
+If  {\tt NM} is unknown it may be omitted, but the comma delimiter must be retained so that the string can be easily parsed into the 6 subfields.
+In the presence of an existing {\tt OA} tag, a subsequent tool may append another set of original alignment information after the semicolon,
+adding to---rather than replacing---the existing {\tt OA} information.
+
+Note 1: While commas are legal characters in sequence names, it is forbidden to have an {\tt OA} tag with such sequences.
+
+Note 2: {\sf RNAME} must be stated explicitly: the use of \,`=', which is allowed in {\sf RNEXT}, is not allowed here.
+
+Note 3: The {\tt OA} field is designed to provide record-level information that can be useful for understanding the provenance of the information in a record. 
+It is not designed to provide a complete history of the template alignment information. 
+In particular, information regarding Secondary and Supplementary alignments may be lost.
+
 \item[OC:Z:\tagvalue{cigar}]
 Original CIGAR, usually before realignment.
+Deprecated by the more general {\tt OA}.
 
 \item[OP:i:\tagvalue{pos}]
-Original 1-based mapping position, usually before realignment.
+Original {\sf POS, usually before realignment.
+Deprecated by the more general {\tt OA}.
 
 \item[OQ:Z:\tagvalue{qualities}]
 Original base quality, usually before recalibration.
@@ -353,7 +374,7 @@ macro (with the C locale). For example a percent sign becomes
 %NOTE - This leaves open the possibility of allowing multiple such
 %entries for a single CT tag to be combined with | as in the PT tag.
 
-\item[PT:Z:\tagregex{\tt \emph{start};\emph{end};\emph{strand};\emph{type}(;\emph{key}(=\emph{value}))*(\char92|\emph{start};\emph{end};\emph{strand};\emph{type}(;\emph{key}(=\emph{value}))*)*}]
+\item[PT:Z:\tagregex{\tt \emph{start};\emph{end};\emph{strand};\emph{type}(;\emph{key}(=\emph{value}))*(\char92|\emph{start}; \emph{end};\emph{strand};\emph{type}(;\emph{key}(=\emph{value}))*)*}] 
 Read annotations for parts of the padded read sequence.
 
 The {\tt PT} tag value has the format of a series of
@@ -520,6 +541,13 @@ CQ & HI & NH & R2 & UQ
 \end{center}
 
 At this time, SQ and S2 were already deprecated in favour of E2 and U2.
+
+\subsection*{1.5: 23 May 2013 to current}
+\begin{itemize}
+\item Add OA tag for recording original/previous alignment information. (July 2018)
+\item Add UMI-related tags (RX, QX, OX, BZ, MI) and clarified usage of sample barcode tag BC. (August 2017)
+\item SAMtags.txt (this file) created with tags from SAMv1 
+\end{itemize}
 
 \end{appendices}
 
