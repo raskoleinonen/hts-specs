@@ -210,7 +210,7 @@ for any associated quality values.
 
 Le\item[SA:Z:\tagregex{{\tt (}\sf{RNAME}{\tt ,}\sf{POS}{\tt ,}\emph{strand}{\tt ,}\sf{CIGAR}{\tt ,}\sf{MAPQ}{\tt ,}\sf{NM}{\tt ;)}+}]
 The tag encodes the values of other canonical alignments in a chimeric alignment, formatted as a semicolon-delimited list. 
-Where \emph{strand} encodes the 0x10 bit of {\sf FLAG}---indicating positive/negative strand--- such that it is '+' if the bit is unset and '--' if the bit is set.
+Where \emph{strand} encodes the 0x10 bit of {\sf FLAG}---indicating positive/negative strand---such that it is '+' if the bit is unset and '--' if the bit is set.
 The other values are taken directly from the canonical read.
 Each element in the list represents a part of the chimeric alignment. 
 Conventionally, when present at a supplementary line, the first element points to the primary line.
