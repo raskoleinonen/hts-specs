@@ -321,7 +321,7 @@ In the case of multiple unique molecular identifiers (e.g., one on each end of t
 
 \begin{description}
 \item[OA:Z:\tagregex{{\tt (}\sf{RNAME}{\tt,\,}\sf{POS}{\tt,\,}\emph{strand}{\tt,\,}\sf{CIGAR}{\tt,\,}\sf{MAPQ}{\tt,\,}\sf{NM}{\tt; )}+}]
-The tag encodes the original alignment information of the segment prior to realignment or unalignment by subsequent tool. 
+The tag encodes the original alignment information of the record prior to realignment or unalignment by subsequent tool. 
 Here {\sf strand} encodes the 0x10 bit of {\sf FLAG}---{\sf SEQ} being reverse complemented---such that it is `+' if the bit is unset and `-' if the bit is set,
 Resulting string is the result of joining the 6 values with commas `,' (no additional spaces).
 If  {\tt NM} is unknown it may be omitted, but the comma delimiter must be retained so that the string can be easily parsed into the 6 subfields.
@@ -334,7 +334,7 @@ Note 2: {\sf RNAME} must be stated explicitly: the use of \,`=', which is allowe
 
 Note 3: The {\tt OA} field is designed to provide record-level information that can be useful for understanding the provenance of the information in a record. 
 It is not designed to provide a complete history of the template alignment information. 
-In particular, information regarding Secondary and Supplementary alignments may be lost.
+In particular, realignments resulting in the the removal of Secondary or Supplementary records will cause the loss of all tags associated with those records, and may alternatively leave the {\tt SA} tag in an invalid state.
 
 \item[OC:Z:\tagvalue{cigar}]
 Original CIGAR, usually before realignment.
