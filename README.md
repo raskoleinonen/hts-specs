@@ -1,9 +1,15 @@
+
+Build Status:
+[![CircleCI](https://circleci.com/gh/samtools/hts-specs.svg?style=svg)](https://circleci.com/gh/samtools/hts-specs)
+
 SAM/BAM and related specifications
 ==================================
 
 Links **in bold** point to the corresponding PDFs on this repository's [GitHub Pages website][hts-specs].
 
 Please request improvements or report errors using this repository, but see also [the list of maintainers](MAINTAINERS.md) if you need to contact them directly.
+
+
 
 
 Alignment data files

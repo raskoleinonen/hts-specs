@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: blang/latex:ubuntu
+    
+    steps:
+      - checkout
+      - run:
+          name: Greeting
+          command: echo Hello, world.
+      - run:
+          name: Print the Current Time
+          command: date
+      - run: 
+          name: Complile the latex
+          command: |
+              make
+              mkdir pdfs
+              cp new/*.pdf pdfs
+              mkdir logs
+              cp new/*.log logs
+      
+      - store_artifacts:
+          path: pdfs
+      - store_artifacts: 
+          path: logs
+
