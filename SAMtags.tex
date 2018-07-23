@@ -208,7 +208,7 @@ Same encoding as {\sf QUAL}.
 Sequence of the mate/next segment in the template.  See also {\tt Q2}
 for any associated quality values.
 
-Le\item[SA:Z:\tagregex{{\tt (}\sf{RNAME}{\tt ,}\sf{POS}{\tt ,}\emph{strand}{\tt ,}\sf{CIGAR}{\tt ,}\sf{MAPQ}{\tt ,}\sf{NM}{\tt ;)}+}]
+\item[SA:Z:\tagregex{{\tt (}\sf{RNAME}{\tt ,}\sf{POS}{\tt ,}\emph{strand}{\tt ,}\sf{CIGAR}{\tt ,}\sf{MAPQ}{\tt ,}\sf{NM}{\tt ;)}+}]
 The tag encodes the values of other canonical alignments in a chimeric alignment, formatted as a semicolon-delimited list. 
 Where \emph{strand} encodes the 0x10 bit of {\sf FLAG}---indicating positive/negative strand---such that it is '+' if the bit is unset and '--' if the bit is set.
 The other values are taken directly from the canonical read.
@@ -322,8 +322,9 @@ In the case of multiple unique molecular identifiers (e.g., one on each end of t
 \begin{description}
 \item[OA:Z:\tagregex{{\tt (}\sf{RNAME}{\tt,\,}\sf{POS}{\tt,\,}\emph{strand}{\tt,\,}\sf{CIGAR}{\tt,\,}\sf{MAPQ}{\tt,\,}\sf{NM}{\tt; )}+}]
 The tag encodes the original alignment information of the record prior to realignment or unalignment by subsequent tool. 
-Here {\sf strand} encodes the 0x10 bit of {\sf FLAG}---{\sf SEQ} being reverse complemented---such that it is `+' if the bit is unset and `-' if the bit is set,
-Resulting string is the result of joining the 6 values with commas `,' (no additional spaces).
+Here \emph{Strand} is either `{\tt +}' or `{\tt -}', indicating whether the read has been reverse-complemented, which corresponds to FLAG bit 0x10.
+That is, \emph{Strand} is `+' if the bit is unset and `-' if the bit is set.
+The resulting string is the result of joining the 6 values with commas `,' (no additional spaces).
 If  {\tt NM} is unknown it may be omitted, but the comma delimiter must be retained so that the string can be easily parsed into the 6 subfields.
 In the presence of an existing {\tt OA} tag, a subsequent tool may append another set of original alignment information after the semicolon,
 adding to---rather than replacing---the existing {\tt OA} information.
